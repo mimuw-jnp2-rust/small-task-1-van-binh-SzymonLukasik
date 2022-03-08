@@ -1,0 +1,26 @@
+Hi! Welcome to Van Binh! What's your name?
+Welcome, Mark Zuckerberg!
+Enter dish name or empty line to finish:
+Enter dish name or empty line to finish:
+Enter dish name or empty line to finish:
+Enter dish name or empty line to finish:
+Takeaway? (y/n)
+Would you like to save this order? (y/n)
+This is order no. 1
+There you go: chicken: 2, tofu: 1, rice: 0, takeway: false, it's going to be 55 zł
+Hi! Welcome to Van Binh! What's your name?
+Welcome back, Mark Zuckerberg!
+Same as usual? (y/n)
+This is order no. 2
+There you go: chicken: 2, tofu: 1, rice: 0, takeway: false, it's going to be 55 zł
+Hi! Welcome to Van Binh! What's your name?
+Welcome back, Mark Zuckerberg!
+Same as usual? (y/n)
+Enter dish name or empty line to finish:
+Enter dish name or empty line to finish:
+Enter dish name or empty line to finish:
+Takeaway? (y/n)
+This is order no. 3
+There you go: chicken: 0, tofu: 1, rice: 1, takeway: false, it's going to be 27 zł
+Hi! Welcome to Van Binh! What's your name?
+Bye!
