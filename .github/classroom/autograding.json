@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "Cargo fmt and clippy",
+      "setup": "",
+      "run": "cargo fmt --check &&  cargo clippy --all-targets --all-features -- -D warnings",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 1,
+      "points": 1
+    },
+    {
+      "name": "Run tests",
+      "setup": "chmod +x ./test.sh",
+      "run": "./test.sh",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 1,
+      "points": 1
+    }
+  ]
+}
