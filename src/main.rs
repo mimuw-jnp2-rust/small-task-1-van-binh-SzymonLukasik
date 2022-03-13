@@ -51,7 +51,7 @@ impl Order {
     }
 
     fn items_count(&self) -> u32 {
-        self.dishes.iter().map(|(_, n)| n).sum::<u32>()
+        self.dishes.values().sum::<u32>()
     }
 
     fn is_takeaway(&self) -> bool {
