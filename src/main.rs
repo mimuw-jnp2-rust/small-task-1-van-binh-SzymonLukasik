@@ -1,7 +1,9 @@
+use enum_iterator::IntoEnumIterator;
+use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::io::stdin;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, IntoEnumIterator)]
 enum Dish {
     ThaiChicken,
     Tofu,
@@ -21,35 +23,47 @@ impl Dish {
 const TAKEAWAY_FEE: u32 = 1;
 
 #[derive(Debug, Clone)]
-struct Order; // TODO
+struct Order {
+    dishes: HashMap<Dish, u32>,
+    takeaway: bool,
+}
 
 impl Order {
     fn new() -> Order {
-        todo!()
+        Order {
+            dishes: Dish::into_enum_iter()
+                .map(|dish| (dish, 0))
+                .collect::<HashMap<Dish, u32>>(),
+            takeaway: false,
+        }
     }
 
     fn add_dish(&mut self, dish: Dish) {
-        todo!()
+        self.dishes.entry(dish).and_modify(|x| *x += 1);
     }
 
     fn set_takeaway(&mut self) {
-        todo!()
+        self.takeaway = true;
     }
 
     fn dish_count(&self, dish: Dish) -> u32 {
-        todo!()
+        *self.dishes.get(&dish).unwrap()
     }
 
     fn items_count(&self) -> u32 {
-        todo!()
+        self.dishes.values().sum::<u32>()
     }
 
     fn is_takeaway(&self) -> bool {
-        todo!()
+        self.takeaway
     }
 
     fn total(&self) -> u32 {
-        let sum = todo!();
+        let sum = self
+            .dishes
+            .iter()
+            .map(|(dish, n)| dish.price() * n)
+            .sum::<u32>();
 
         if self.is_takeaway() {
             sum + self.items_count() * TAKEAWAY_FEE
@@ -63,7 +77,7 @@ impl Display for Order {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "chicken: {}, tofu: {}, rice: {}, takeaway: {}",
+            "chicken: {}, tofu: {}, rice: {}, takeway: {}",
             self.dish_count(Dish::ThaiChicken),
             self.dish_count(Dish::Tofu),
             self.dish_count(Dish::FriedRice),
@@ -77,6 +91,15 @@ struct Customer {
     favorite_order: Order,
 }
 
+impl Customer {
+    pub fn new(name: String, favorite_order: Order) -> Customer {
+        Customer {
+            name,
+            favorite_order,
+        }
+    }
+}
+
 struct VanBinh {
     orders_count: u32,
     customers: Vec<Customer>,
@@ -84,11 +107,14 @@ struct VanBinh {
 
 impl VanBinh {
     pub fn new() -> VanBinh {
-        todo!()
+        VanBinh {
+            orders_count: 0,
+            customers: Vec::new(),
+        }
     }
 
     fn add_customer(&mut self, name: String, favorite_order: Order) {
-        todo!()
+        self.customers.push(Customer::new(name, favorite_order));
     }
 
     fn get_saved_customer(&self, name: &str) -> Option<&Customer> {
@@ -96,11 +122,11 @@ impl VanBinh {
     }
 
     fn increase_orders_count(&mut self) {
-        todo!()
+        self.orders_count += 1;
     }
 
     fn get_orders_count(&self) -> u32 {
-        todo!()
+        self.orders_count
     }
 }
 
@@ -143,7 +169,6 @@ fn get_order() -> Order {
 
 fn main() {
     let mut van_binh = VanBinh::new();
-
     loop {
         println!("Hi! Welcome to Van Binh! What's your name?");
         let name = get_line();
@@ -155,7 +180,7 @@ fn main() {
         let order = if let Some(customer) = van_binh.get_saved_customer(&name) {
             println!("Welcome back, {}!", customer.name);
             if yes_no("Same as usual?") {
-                todo!() // use customer's favorite order
+                customer.favorite_order.clone()
             } else {
                 get_order()
             }
@@ -163,13 +188,17 @@ fn main() {
             println!("Welcome, {}!", name);
             let order = get_order();
             if yes_no("Would you like to save this order?") {
-                todo!() // save customer's favorite order in van_binh struct
+                van_binh.add_customer(name, order.clone())
             }
             order
         };
 
-        todo!(); // Check if the order is empty
-        println!("Your order is empty!");
+        if order.items_count() == 0 {
+            println!("Your order is empty!");
+            continue;
+        } else {
+            van_binh.increase_orders_count();
+        }
 
         println!("This is order no. {}", van_binh.get_orders_count());
         println!(
@@ -177,7 +206,6 @@ fn main() {
             order,
             order.total()
         );
-        van_binh.increase_orders_count();
     }
     println!("Bye!");
 }
